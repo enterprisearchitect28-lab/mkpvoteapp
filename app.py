@@ -3,15 +3,17 @@ import streamlit as st
 # App title
 st.title("🛒 Marketplace Initiatives Voting")
 
-st.markdown("Please vote for the best Marketplace initiative from this Hackathon. ✅ One vote per user.")
+st.markdown("Please vote for the best initiative from this Hackathon. ✅ One vote per user.")
 
 # Initiatives list
 initiatives = [
-    "AI-powered Category Guard",
-    "Seller Review Analytics Dashboard",
-    "AdTech Self-Service Funding",
-    "Marketplace Shops Expansion",
-    "Offer Import Service Optimization"
+    "Marketplace",
+    "Customer",
+    "Customer Experience",
+    "LastMile",
+    "OMS",
+    "Search",
+    "PIM/Catalogue/Promotions"
 ]
 
 # Radio button for selection
