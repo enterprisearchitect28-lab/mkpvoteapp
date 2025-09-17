@@ -1,7 +1,7 @@
 import streamlit as st
 
 # App title
-st.title("🛒 Marketplace Initiatives Voting")
+st.title("🛒 Voting App(Developed by Marketplace Team using Streamlit")
 
 st.markdown("Please vote for the best initiative from this Hackathon. ✅ One vote per user.")
 
