@@ -1,35 +1,51 @@
 import streamlit as st
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+import urllib.parse as urlparse
 
-# App title
-st.title("🛒 Voting App(Developed by Marketplace Team using Streamlit)")
+# Connect to Google Sheets
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+creds = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", scope)
+client = gspread.authorize(creds)
 
-st.markdown("Please vote for the best initiative from this Hackathon. ✅ One vote per user.")
+sheet = client.open("Hackathon_Votes").sheet1
 
-# Initiatives list
+# Parse user token from URL
+query_params = st.experimental_get_query_params()
+user_id = query_params.get("user", ["anonymous"])[0]
+
+st.title("🛒 Marketplace Initiatives Voting")
+st.markdown(f"Welcome, **{user_id}**! Please cast your vote below. ✅ One vote per user.")
+
 initiatives = [
-    "Marketplace",
-    "Customer",
-    "Customer Experience",
-    "LastMile",
-    "OMS",
-    "Search",
-    "PIM/Catalogue/Promotions"
+    "AI-powered Category Guard",
+    "Seller Review Analytics Dashboard",
+    "AdTech Self-Service Funding",
+    "Marketplace Shops Expansion",
+    "Offer Import Service Optimization"
 ]
 
-# Radio button for selection
 vote = st.radio("Select your favorite initiative:", initiatives)
 
-# Store votes in session (for demo)
-if "voted" not in st.session_state:
-    st.session_state.voted = False
-
 if st.button("Submit Vote"):
-    if st.session_state.voted:
-        st.warning("⚠️ You have already voted! One vote per user.")
+    # Check if user has already voted
+    all_votes = sheet.col_values(1)
+    if user_id in all_votes:
+        st.warning("⚠️ You have already voted!")
     else:
-        st.session_state.voted = True
+        sheet.append_row([user_id, vote])
         st.success(f"✅ Thanks for voting for: **{vote}**")
 
-st.markdown("---")
-st.info("Results will be consolidated by the organizing team.")
+# Show live results
+st.subheader("📊 Live Results")
+votes = sheet.get_all_records()
+if votes:
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    df = pd.DataFrame(votes)
+    results = df["vote"].value_counts()
+
+    st.bar_chart(results)
+
 
