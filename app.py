@@ -1,10 +1,33 @@
 import streamlit as st
 
-st.title("Hackathon Voting App 🎉")
+# App title
+st.title("🛒 Marketplace Initiatives Voting")
 
-teams = ["MKP Shops", "Category Guard (AI)", "Seller Reviews Insights", "AdTech Self-Funding", "Offer Import Optimizer"]
+st.markdown("Please vote for the best Marketplace initiative from this Hackathon. ✅ One vote per user.")
 
-vote = st.radio("Select your favorite project:", teams)
+# Initiatives list
+initiatives = [
+    "AI-powered Category Guard",
+    "Seller Review Analytics Dashboard",
+    "AdTech Self-Service Funding",
+    "Marketplace Shops Expansion",
+    "Offer Import Service Optimization"
+]
+
+# Radio button for selection
+vote = st.radio("Select your favorite initiative:", initiatives)
+
+# Store votes in session (for demo)
+if "voted" not in st.session_state:
+    st.session_state.voted = False
 
 if st.button("Submit Vote"):
-    st.success(f"✅ Thanks for voting for: {vote}")
+    if st.session_state.voted:
+        st.warning("⚠️ You have already voted! One vote per user.")
+    else:
+        st.session_state.voted = True
+        st.success(f"✅ Thanks for voting for: **{vote}**")
+
+st.markdown("---")
+st.info("Results will be consolidated by the organizing team.")
+
